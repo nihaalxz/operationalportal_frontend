@@ -1,0 +1,39 @@
+{
+	"name": "operation-portal-frontend",
+	"private": true,
+	"version": "0.0.1",
+	"type": "module",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "vite build",
+		"build:wwwroot": "vite build && node scripts/copy-to-wwwroot.js",
+		"preview": "vite preview",
+		"prepare": "svelte-kit sync || echo ''",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"api:types": "openapi-typescript http://localhost:5005/swagger/v1/swagger.json --output src/lib/api/generated/api-types.ts",
+		"test:unit": "vitest run"
+	},
+	"devDependencies": {
+		"@internationalized/date": "^3.12.4",
+		"@lucide/svelte": "^1.24.0",
+		"@sveltejs/adapter-auto": "^7.0.1",
+		"@sveltejs/adapter-static": "^3.0.10",
+		"@sveltejs/kit": "^2.63.0",
+		"@sveltejs/vite-plugin-svelte": "^7.1.2",
+		"@tailwindcss/postcss": "^4.3.2",
+		"@tailwindcss/vite": "^4.3.2",
+		"bits-ui": "^2.18.1",
+		"clsx": "^2.1.1",
+		"lucide-svelte": "^1.0.1",
+		"openapi-typescript": "^7.13.0",
+		"svelte": "^5.56.1",
+		"svelte-check": "^4.6.0",
+		"tailwind-merge": "^3.6.0",
+		"tailwind-variants": "^3.2.2",
+		"tailwindcss": "^4.3.2",
+		"typescript": "^6.0.3",
+		"vite": "^8.0.16",
+		"vitest": "^4.1.10"
+	}
+}
