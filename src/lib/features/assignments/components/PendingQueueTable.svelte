@@ -120,7 +120,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{#each items as item, index (item.entityType + '_' + item.id)}
+				{#each items as item, index (item.entityType + '_' + (item.refNo || item.id))}
 					<tr class="data-table__row">
 						<td class="text-center font-mono text-xs text-muted-foreground">{startIndex + index + 1}</td>
 						{#if showService}
@@ -170,7 +170,7 @@
 
 	<!-- Mobile Cards -->
 	<div class="mobile-cards" aria-label="Pending applications cards">
-		{#each items as item, index (item.entityType + '_' + item.id)}
+		{#each items as item, index (item.entityType + '_' + (item.refNo || item.id))}
 			<div class="mobile-card">
 				<div class="mobile-card__header">
 					<div style="display: flex; align-items: center; gap: 0.5rem;">

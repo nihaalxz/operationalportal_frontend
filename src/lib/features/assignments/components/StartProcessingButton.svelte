@@ -41,7 +41,7 @@
 
 		isClaiming = true;
 		try {
-			await claimOperation(entityType, entityId, refNo);
+			await claimOperation(entityType, Number(entityId), refNo);
 			await refreshPendingCount();
 			if (onSuccess) onSuccess();
 			await goto(detailUrl);

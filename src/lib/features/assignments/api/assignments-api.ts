@@ -17,8 +17,8 @@ export async function claimOperation(
 		method: 'POST',
 		body: JSON.stringify({
 			entityType,
-			entityId,
-			entityDocumentNumber
+			entityId: Number(entityId),
+			entityDocumentNumber: entityDocumentNumber || null
 		})
 	});
 }
@@ -142,7 +142,8 @@ export async function fetchPendingQueueItems(): Promise<{
 
 	// Visas
 	for (const item of visaItems) {
-		const key = `VISA_${item.id}`;
+		const visaEntityId = item.id !== undefined && item.id !== null ? Number(item.id) : 0;
+		const key = `VISA_${visaEntityId}`;
 		const isAssigned = !!assignmentsMap[key];
 		const isPending = (item.processingStatus || '').toLowerCase() === 'pending';
 
@@ -155,10 +156,10 @@ export async function fetchPendingQueueItems(): Promise<{
 			const visaPackDetails = `${item.visaPackName || 'Visa Package'} (${item.applicantCount || 1} applicant${(item.applicantCount || 1) !== 1 ? 's' : ''})`;
 			const govtId = item.govtTrackingId || item.govtId || '—';
 			pendingItems.push({
-				id: item.id,
+				id: visaEntityId,
 				entityType: 'VISA',
-				entityId: item.id,
-				refNo: item.documentNumber || `#VISA-${item.id}`,
+				entityId: visaEntityId,
+				refNo: item.documentNumber || `#VISA-${visaEntityId}`,
 				customer: item.headName || 'Not filled by staff',
 				salesmanName,
 				applicantFirstName,
@@ -175,14 +176,15 @@ export async function fetchPendingQueueItems(): Promise<{
 				createdAt: item.createdAt,
 				priority: determinePriority(item.payableAmount || 0, waitingMinutes),
 				waitingMinutes,
-				detailUrl: `/visas/${item.id}`
+				detailUrl: `/visas/${visaEntityId}`
 			});
 		}
 	}
 
 	// VFS
 	for (const item of vfsItems) {
-		const key = `VFS_${item.id}`;
+		const vfsEntityId = item.id !== undefined && item.id !== null ? Number(item.id) : 0;
+		const key = `VFS_${vfsEntityId}`;
 		const isAssigned = !!assignmentsMap[key];
 		const isPending = (item.processingStatus || '').toLowerCase() === 'pending';
 
@@ -192,10 +194,10 @@ export async function fetchPendingQueueItems(): Promise<{
 			const applicantFirstName = item.name ? item.name.trim().split(' ')[0] : 'Applicant';
 			const visaPackDetails = `${item.visaType || 'VFS'} Appointment`;
 			pendingItems.push({
-				id: item.id,
+				id: vfsEntityId,
 				entityType: 'VFS',
-				entityId: item.id,
-				refNo: item.documentNumber || `#VFS-${item.id}`,
+				entityId: vfsEntityId,
+				refNo: item.documentNumber || `#VFS-${vfsEntityId}`,
 				customer: item.headName || 'Not filled by staff',
 				salesmanName: '',
 				applicantFirstName,
@@ -212,14 +214,15 @@ export async function fetchPendingQueueItems(): Promise<{
 				createdAt: item.createdAt,
 				priority: determinePriority(item.payableAmount || 0, waitingMinutes),
 				waitingMinutes,
-				detailUrl: `/vfs/${item.id}`
+				detailUrl: `/vfs/${vfsEntityId}`
 			});
 		}
 	}
 
 	// Holidays
 	for (const item of holidayItems) {
-		const key = `HOLIDAY_${item.id}`;
+		const holidayEntityId = item.id !== undefined && item.id !== null ? Number(item.id) : 0;
+		const key = `HOLIDAY_${holidayEntityId}`;
 		const isAssigned = !!assignmentsMap[key];
 		const isPending = (item.processingStatus || '').toLowerCase() === 'pending';
 
@@ -229,10 +232,10 @@ export async function fetchPendingQueueItems(): Promise<{
 			const applicantFirstName = item.passengerName ? item.passengerName.trim().split(' ')[0] : 'Passenger';
 			const visaPackDetails = `${item.days || 0} Days Holiday Package`;
 			pendingItems.push({
-				id: item.id,
+				id: holidayEntityId,
 				entityType: 'HOLIDAY',
-				entityId: item.id,
-				refNo: item.documentNumber || `#HOLIDAY-${item.id}`,
+				entityId: holidayEntityId,
+				refNo: item.documentNumber || `#HOLIDAY-${holidayEntityId}`,
 				customer: item.headName || 'Not filled by staff',
 				salesmanName: '',
 				applicantFirstName,
@@ -249,7 +252,7 @@ export async function fetchPendingQueueItems(): Promise<{
 				createdAt: item.createdAt,
 				priority: determinePriority(item.payableAmount || 0, waitingMinutes),
 				waitingMinutes,
-				detailUrl: `/holidays/${item.id}`
+				detailUrl: `/holidays/${holidayEntityId}`
 			});
 		}
 	}
