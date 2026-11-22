@@ -118,10 +118,18 @@
 			if (!s.categories || s.categories.length === 0) return true;
 			return s.categories.some((c) => {
 				const lower = c.toLowerCase();
-				return lower.includes('visa') || lower.includes('vfs') || lower.includes('general') || lower.includes('supplier');
+				return (
+					lower.includes('visa') ||
+					lower.includes('vfs') ||
+					lower.includes('translation') ||
+					lower.includes('other') ||
+					lower.includes('general') ||
+					lower.includes('supplier')
+				);
 			});
 		});
-		return matches.length > 0 ? matches : suppliers;
+		const list = matches.length > 0 ? matches : suppliers;
+		return [...list].sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 	});
 
 	let govtFees = $state<Array<{ row_key?: string; supplier_id?: number; amount: number; transaction_no: string; govt_fee_description: string; payment_proof?: File; existing_payment_proof?: string }>>([
